@@ -1,0 +1,25 @@
+\begin{tikzpicture}[x=1.25cm, y=1.25cm]
+    % input circles + ellipses
+    \foreach \m/\l [count=\y] in {1,2,missing,3}
+    \node [every neuron/.try, neuron \m/.try] (input-\m) at (0,1-\y) {};
+    % input label
+    \foreach \l [count=\i] in {0,1,N}
+    \node at (input-\i) {$x_\l$};
+    
+    \node[large neuron] (sigma) at (2,-1.5) {$\displaystyle\Sigma$};
+    
+    \foreach \j [count=\i] in {0,1,N}
+            \draw [-latex] (input-\i) -- node[fill=black!10] {$w_\j$} (sigma);
+    
+    
+    \node[square neuron] (activation) at (3.5,-1.5) {$\displaystyle\sigma$};
+        \draw [-latex] (sigma) -- (activation);
+    
+    
+    \node[every neuron] (output) at (5,-1.5) {$ \overline{y}$};
+        \draw [-latex] (activation) -- (output);
+        
+    
+    %\node[scale=1.25] at (4.25,-2.75) {$\displaystyle y= \sigma\left( {\sum_{i=0}^N{x_iw_i}} \right)$};
+    
+\end{tikzpicture}

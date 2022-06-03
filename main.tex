@@ -1,0 +1,34 @@
+\documentclass[a4paper,12pt,two column]{article}
+\usepackage[left=2cm,top=2cm,right=2cm,bottom=2cm]{geometry}
+\input{assets/_packages}
+\input{assets/biblatex}
+\input{assets/tikzpictures}
+\input{assets/commands}
+\input{assets/nomenclature}
+\addbibresource{ref.bib}
+\author{Aman Uddin}
+
+\usepackage[capitalize,nameinlink,noabbrev]{cleveref}
+\crefname{defn}{Definition}{Definitions}
+\crefname{algocf}{alg.}{algs.}
+\Crefname{alg}{Algorithm}{Algorithms}
+\usepackage{subfiles}
+\begin{document}
+%===============================================================
+\subfile{sections/0_abstract}
+\section{Introduction}\label{sec:introduction}
+    \subfile{sections/1_introduction}
+\section{Architecture of a Neural Network}\label{sec:architecture}
+    \subfile{sections/2_architecture}
+\section{Single-layer Neural Networks}\label{sec:singlelayer}
+    \subfile{sections/3_single}
+\section{Multi-layer Neural Networks}\label{sec:multilayer}
+    \subfile{sections/4_multi}
+\section{Error Back-propagation and Training Neural Networks}\label{sec:back}
+    \subfile{sections/5_back}
+\section{Conclusion}\label{sec:conc}
+    \input{sections/6_conclusion}
+%===============================================================
+\printbibliography
+\input{sections/Y_nomenclature}
+\end{document}

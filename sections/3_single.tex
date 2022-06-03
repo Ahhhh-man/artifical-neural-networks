@@ -1,0 +1,33 @@
+Single-layer neural networks can form a useful insight into more complicated (multi-layer) neural networks. In this section, we discuss the complete forward computations within a single-layer neural network, commonly referred to the \textit{forward propagation} of a perceptron. The algorithm for a perceptron was invented by Frank Rosenblatt in 1958 and can be visualised by \autoref{fig:percep_arc}, which can be interpreted as using a distributed cascade of nonlinear transformations to map any given inputs to an output \parencite{inbook}.
+%::::::::::::::::::::::::::::
+\begin{figh}
+    \input{img/3_single/perceptron}
+    \caption{Architecture of a perceptron with $N$ inputs (bias embedded into inputs/weights)}
+    \label{fig:percep_arc}
+\end{figh}
+%::::::::::::::::::::::::::::
+Let $\Vec{x}$ be the $N$-dimensional vector space $(x_1, x_2,\dots,x_N)$ of real values, $\Vec{w}$ be their associated weight values $(w_1, w_2,\dots,w_N)$ and $b$ be the bias. Often the bias is embedded within the weight vector under $i=0$, that is, $w_0 := b$ with $x_0:=1$ \parencite[77]{mainbook}. The zeroth neuron, $x_0$, is often referred to the the bias value, while the zeroth weight, $w_0$, is called the bias weight value. Following this convention, let $X=(x_0,x_1,\dots,x_N)$ and $W=(w_0,w_1,\dots,w_N)$ be $(N+1)\times 1$ column matrices. Transpose $W$ in order to obtain $W^{\top}$, a $1 \times (N+1)$ matrix. Note that the use of matrices is not necessary but beneficial due to information processing system being more efficient with matrices during computations; in particular, since the current generation of GPU's are hardware specialised to deal with data streams, they are able to do a lot of parallel computations \parencite{parallel}. Then form the \textit{linear node} by the sum of inputs $x_i$ multiplied by $w_i$ for all $i =0,\dots,N$; or equivalently $W^\top X$, yielding a $1 \times 1$ matrix $Z$ of a pre-activated value $z$,
+%::::::::::::::::::::::::::::
+\begin{equation}
+    \sum_{i=0}^N{x_iw_i} = z \iff 
+    W^\top X=Z.
+    \label{eq:linearcombination}
+\end{equation}
+%::::::::::::::::::::::::::::
+\begin{rem}
+    Observe that $z$ is the inner product space 
+    for the real $N$-space $\mathbb {R}^{N}$ of the inputs $X$ and their associated weight values in $W$ with the dot product, hence $z$ in the inner product layer is known as an inner product node.
+\end{rem}
+%::::::::::::::::::::::::::::
+%and is a consequence of a Taylor network, further discussed in \cite{higham2018deep}.
+The following function is then implemented to provide non-linearity and normalise the entry of $Z$ \parencite{LIU2020283}. The logistic sigmoid function, $\sigma:\mathbb{R}\rightarrow (0,1)$ defined by $\sigma(x)=(1+e^{-x})^{-1}$, discussed in \autoref{sec:activation}. Let $a$ be the post-activated $z$ such that
+\begin{equation}
+    a=\sigma(z).
+    \label{eq:activated}
+\end{equation}
+Hence, as depicted on \autoref{fig:percep_arc}, the output $\overline{y}$ of a perceptron can be formulated by combining \autoref{eq:linearcombination} and \autoref{eq:activated},
+\begin{align}
+   \overline{y} &= \sigma(W^\top X) \\
+    &= \sigma\left(\sum_{i=0}^N{x_iw_i}\right). \nonumber
+\end{align}
+\vspace{-.5cm}

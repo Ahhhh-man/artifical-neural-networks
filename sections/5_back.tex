@@ -1,0 +1,102 @@
+\subsection{Parameter Initialisation}\label{sec:parinital}
+In \autoref{sec:multilayer}, the output of a neural network was calculated, however observe that the parameters $\theta = \{\text{weights, biases}\}$ were not explicitly stated, as ideal values for these variables are currently unknown. Training the neural network is used to determine the parameters; such objective can be achieved by minimising the error, which leads to \autoref{subsec:train}. 
+However, these parameters should be initialised in advance of those procedures. 
+Initialisation may have a major effect on the convergence of deep neural networks training, to be discussed in \autoref{sec:gradientdescent}, a feat critical to the success of the network.
+Simple schemes have been identified to speed up learning, but care is needed to prevent common pitfalls. Here, a fairly basic method of initialisation is introduced. 
+Firstly, the weights are assigned values randomly; this can be generated using the normal distribution with mean $0$ and variance $\nicefrac{1}{n}$ for some $n\in\mathbb{N}_1$ denoting the number of datasets. The advantages of this generation leads to a lack of symmetry for each perceptron in \autoref{fig:multi}, that is, perceptrons are discouraged in learning identically. Lastly, it is common to initialise all biases to zero as the weights defined above already provide asymmetry. 
+
+Indeed the randomness of $\theta$ may yield a random set of meaningless outputs. However, after initialisation, the parameters can now be numerically analysed, in order to observe the error they yield. 
+
+\subsection{Error Cost Function}\label{subsec:train}
+For this article, the neural network is limited to supervised learning, that is, the desired output is already known. In particular, there exists a training dataset.
+
+\begin{defn}
+A training dataset $\mathcal{T}$ consists of input-output pairs $(X,Y)$, where $X$ is input matrix and $Y$ is the desired (target) output matrix of the network on input $X$. Then a training dataset of size $T$ is denoted $\mathcal{T}:=\set{(X_i,Y_i):1\leq i \leq T}$.
+\end{defn}
+
+As shown above, the ANN has a mapping $F:X\rightarrow \overline{Y}$ defined $F(\theta;X)=\overline{Y}$, where $F$ is the implemented transformations in forward propagation. Consider a single arbitrary element $(X,Y)\in\mathcal{T}$, then the error between the predicted output $\overline{Y}$ and the desired output $Y$ is given by the squared loss function\footnote{The square loss function is used here in preparation for the squared error cost function, however one may use the absolute loss for the absolute error cost function. } for $y\in Y$ and $\overline{y} \in\overline{Y}$,
+\begin{align*}
+    \mathcal{L}(Y,\overline{Y})=\sum_{i=1}^{n^{(L)}} (\overline{y}_{i}-y_i)^2,
+\end{align*}
+where $n^{(L)}$ is the dimensionality of the target set (ipso facto, the size of the predicted output set). However, the loss function only considers the errors produced by a single element from the dataset, hence the error cost function $\mathcal{J}$ is used to  calculate a single-valued total error by computing over the entire training data set. Similar to the activation function, there are many different functions that may be used including: Mean Squared Error (MSE) and Root Mean Square (RMS). For its simplicity and popularity, the Squared Error (SE) will be used  \parencite[]{taylorbook},
+\begin{align}
+    \mathcal{J}_{SE}(\theta;\mathcal{T})
+    &=\frac{1}{2}\sum_{i=1}^{T} \mathcal{L}^{(i)} 
+    \label{eq:squareerror},
+\end{align}
+where $\mathcal{L}^{(i)}$ is the loss function for the $i$-th training element of $\mathcal{T}$.
+
+For the sake of simplicity, the size of the training dataset, $T$, will be $1$. Therefore, along with the fact that $n^{(L)}=n^{(2)}=1$ (see \autoref{fig:multi}) and $\overline{y}\in \overline{Y}=F(\theta;X)$, 
+our cost function can be denoted,
+\begin{align}
+    \mathcal{J}:=\mathcal{J}_{SE}=\frac{1}{2}\mathcal{L}(y,\overline{y})=\frac{1}{2}(\overline{y}-y)^2 \label{eq:reducedsquareerror}.
+\end{align}
+
+Take note that the set of parameters $\theta$ in \autoref{fig:multi} is equivalent to the set $\{W^{(1)},W^{(2)}\}$, where the biases have been integrated into the weight matrices accordingly. As shown in \autoref{fig:multi}, the elements of $W^{(2)}$ have a direct implication towards the output layer. While the elements in $W^{(1)}$ have an indirect implication towards the output layer, since such elements are separated by the hidden layer. However, since both weight matrices have impacts, they both must be considered when minimising the squared error cost function. Hence, the objective function of neural network training can be represented as,
+\begin{align*}
+    \min_{w\in\theta} \mathcal{J}(\theta;\mathcal{T}).
+\end{align*}
+Now we investigate a method for minimising this objective function. 
+
+\subsection{Gradient Descent}\label{sec:gradientdescent}
+The gradient descent method, first proposed by French mathematician Augustin-Louis Cauchy in 1847, is the most widely used supervised optimisation algorithm to train neural networks. This first-order iterative algorithm calculates the local minimum of a differentiable function, whence minimising the function. Gradient descent is useful for complicated models that neural networks aim to tackle due to the ability to process multi-variable functions. Some of the types of gradient descent include: batch gradient descent, all of the training examples are processed for each iteration of gradient descent; stochastic gradient descent, a single training example is processed for each iteration. 
+
+\begin{defn} The gradient matrix of a differentiable function $f:\mathbb{R}^{m\times n}\rightarrow \mathbb{R}$ at a point $W\in\mathbb{R}^{m\times n}$ for some $m,n\in\mathbb{N}_1$, denoted $\nabla f$, is defined
+\begin{equation}
+    \nabla f(W)=
+    \arraycolsep=1pt\def\arraystretch{1.5}
+    \begin{bmatrix}
+            \frac{\partial f}{\partial w_{1,1}} &  \frac{\partial f}{\partial w_{1,2}} & \dots & \frac{\partial f}{\partial w_{1,n}} \\
+            \frac{\partial f}{\partial w_{2,1}} &  \frac{\partial f}{\partial w_{2,2}} & \dots & \frac{\partial f}{\partial w_{2,n}} \\
+            \vdots & \vdots & \ddots & \vdots \\
+            \frac{\partial f}{\partial w_{m,1}} &  \frac{\partial f}{\partial w_{m,2}} & \dots & \frac{\partial f}{\partial w_{m,n}}
+        \end{bmatrix},
+\end{equation}
+    that is, the partial derivative of $f(W)$ with respect to $w_{i,j}$ is the $(i,j)$-th element in $\nabla f(W)$. Moreover, for $w\in W$ the notation is,
+\begin{align*}
+    \nabla_w f=\frac{\partial f}{\partial w}.
+\end{align*}
+\end{defn}
+Consider the initial point of parameters $\theta^{[0]}$ that was initialised in \autoref{sec:parinital},  where the bracketed-superscript denotes the iteration. Then given a training set $\mathcal{T}$, the update policy for the parameters in gradient descent is as follows \parencite{Zhanggradient},
+\begin{align}
+    \theta^{[t+1]}=\theta^{[t]}-\eta \nabla_\theta \mathcal{J}(\theta^{[t]};\mathcal{T}), \label{eq:iteration}
+\end{align}
+ for every iteration $t\in\mathbb{N}_0$, where $\eta$ is the learning rate. The role and significance of the learning rate is discussed below in \autoref{sec:learningrate}. Note  $-\eta \nabla \mathcal{J}_\theta( \theta^{[t]};\mathcal{T}) = \Delta \theta^{[t]}$, that is, the direction the parameters are updated is by an $\eta$-scaled negative gradient matrix. 
+
+Now consider the optimal set of parameters, $\Hat{\theta}$, given by
+\begin{align*}
+    \Hat{\theta} =\arg\min_{\theta\in\mathbb{R}^d} \mathcal{J}(\theta;\mathcal{T}),
+\end{align*}
+for some dimension $d$. Assume an appropriate $\eta$ is chosen. Then gradient descent algorithm converges and terminates for some iteration $t^*\in \mathbb{N}_0$ such that 
+\begin{align*}
+    || \mathcal{J}(\theta^{[t^*]};\mathcal{T}) - \mathcal{J}(\Hat{\theta};\mathcal{T}) || < \epsilon
+\end{align*}
+for all $\epsilon>0$, that is, 
+$
+    \lim_{t \rightarrow t^*} \theta^{[t]} \approx \hat{\theta}
+$ \parencite{sum8789696}.
+While the proof of convergence of the gradient descent is beyond the scopes of this article, \textcite{converge} provides evidence of this assertion. It is only required to know that the derivative of cost function with respect to the parameters does indeed converge, and converges when $t\rightarrow t^*$.  Such $t^*$ does not necessarily need be known, as the following algorithm \parencite[8]{Zhanggradient} will terminate appropriately. 
+\begin{algorithm}[H]
+    \caption{Batch Gradient Descent}
+    \begin{algorithmic}[1]
+        \Require{$\mathcal{T}, \eta$}
+        \Ensure{ $\theta^{[t^*]}$ }
+        \State $t\leftarrow 0$
+        \State Initialise parameters
+        \State Fix $\epsilon > 0$
+        \While {$|| \mathcal{J}(\theta^{[t]};\mathcal{T}) - \mathcal{J}(\Hat{\theta};\mathcal{T}) || > \epsilon$}
+            \ForAll {$(X,Y)\in\mathcal{T}$}
+                \ForAll {$w \in \theta$}
+                    \State $w\leftarrow w-\eta \nabla_w \mathcal{J}(\theta^{[t]};X,Y)$
+                   
+                \EndFor
+            \EndFor
+            \State $t\leftarrow t+1$
+        \EndWhile 
+    \end{algorithmic}
+    \label{alg:grad}
+\end{algorithm}
+Therefore, it remains to calculate $\nabla_w \mathcal{J}$ for  \cref{alg:grad}. 
+\input{sections/5.3.1_outputerror}
+\input{sections/5.3.2_hiddenerror}
+\input{sections/5.4_learningrate}

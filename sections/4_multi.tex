@@ -1,0 +1,87 @@
+\begin{bigfig}
+    \input{img/4_multi/mutliarch}
+    \captionsetup{width=\linewidth}
+    \caption{Two-layer neural network architecture with $N$ inputs, a single hidden layer consisting of $M$ linear nodes and a single output (bias embedded into inputs/weights accordingly). Activation functions are enclosed in squares, linear nodes in large circles and parameters shown in grey boxes are attached to all incoming transmissions to the subsequent linear nodes.}
+    \label{fig:multi}
+\end{bigfig}
+
+One may construct more complex neural networks, including non-linear computing, by making the perceptron a basic building block. This modularity enables neural networks to be built to solve a vast variety of tasks and is the primary characteristic of their success. The architecture of the \autoref{fig:multi} is a two-layer neural network. The layers that make up the network can be further identified: the input layer, which is predominantly made up of input neurons, a hidden layer of parallel perceptrons and the output layer, which handles an output unsurprisingly. A single-layer neural network, as seen in \autoref{fig:percep_arc}, is made up of just an input and output layer. Adding this additional hidden layer is the key to making a neural network more complex. 
+
+Similar to the single-layer network, forward propagation computations uses a combination of summation and activation function. Firstly, notation is introduced. Let $L>1$ be a natural number denoting the number of layers of a neural network and $0\leq \ell\leq L$ denote the $\ell$-th layer. Then $n^{(\ell)}$ denotes the number of neurons (excluding the zeroth neuron holding bias value) in the $\ell$-th layer, hence $n^{(0)}$ and $n^{(L)}$ is the size of the input and output layers respectively. 
+
+Consider the two-layer neural network depicted in \autoref{fig:multi}. Then, since $\ell=0$ for the input layer, $\ell=1$ for the hidden layer and $\ell=2$ for the output layer, there exists $n^{(0)}$ inputs, a single hidden layer consisting of $n^{(1)}$ neurons and $n^{(2)}$ outputs. Note that there is only a single output neuron, hence $n^{(2)}=1$, and will be so for the remainder of this article\footnote{Despite defining $n^{(2)}=1$, there doesn't necessarily need be a single output neuron for the output layer.}. Next, let $0\leq p \leq n^{(0)}$, $0\leq q \leq n^{(1)}$ and $0\leq r \leq n^{(2)}$; these will be identifiers for variables in model. In particular, $p$ denotes the input neurons, $q$ for hidden neurons and $r$ for output neurons. While these help classify variable positions in the architecture, hence make understanding the notation clearer; they are indeed redundant as shown in \autoref{fig:multi}, the superscript accomplishes the same goal. Within more complex models (where there exist $L>2$ layers), the expression $w^{(\ell)}_{i,j}$ is more common\footnote{As many topics of mathematics, the notation can vary from book-to-book; for example, using square brackets instead of parentheses for layers, but the basic gist should be clear. }.  In this case, $i$ denotes the transmitting neuron of the $\ell$-th layer and $j$ denotes the receiving neuron of the $(\ell+1)$-th layer, instead of denoting neurons of a fixed layer.
+
+Let $X$ be the matrix of inputs, where $x_0:=1$, as done in the single-layer neural network. Since in a two-layer neural network, there is an addition layer of neurons in between the input and output layer compared to the single-layer neural network, we introduce an additional weight matrix to accompany the additional edges. 
+Let $W^{(1)}=[w^{(1)}_{p,q}]$ for $0\leq p \leq n^{(0)}$ and $1\leq q \leq n^{(1)}$ be the weight matrix for the first layer. Similarly, $W^{(2)}=[w^{(2)}_{q,r}]$ for $0\leq q \leq n^{(1)}$ and $r=1$ be the weight matrix for the second layer. Since $r=1$, as is the case in  \autoref{fig:multi}, it is common to drop the additional label, $w^{(2)}_{q,r}\rightarrow w^{(2)}_{q}$. 
+
+As done before, the mathematics is simplified (shown below in \autoref{eq:zee}) by embedding the $j$-th bias of the layer $\ell$ into the weights under the zeroth neuron, that is, $w^{(\ell)}_{0,j}:=b^{(\ell)}_{j}$. Hence, in $W^{(1)}$, the biases added are $(w^{(1)}_{0,1},w^{(1)}_{0,2},\dots,w^{(1)}_{0,n^{(1)}})$.
+
+To begin, \autoref{eq:linearcombination} is extended, as there are multiple inner product layers. Let
+\begin{align}
+    z^{(\ell)}_j 
+    &= b^{(\ell)}_i + \sum_{i=1}^{n^{(\ell)}} w^{(\ell)}_{i,j}a^{(\ell-1)}_i \nonumber \\ 
+    &= \sum_{i=0}^{n^{(\ell)}}  w^{(\ell)}_{i,j}a^{(\ell-1)}_i. \label{eq:zee}
+\end{align}
+At first glance, the term $a^{(0)}$ may not make much sense. It has been yet to mention, the input layer is more commonly mapped $\phi:X\rightarrow A^{(0)}$ such that $\phi(x_i)=a^{(0)}_i$ for all $1 \leq i \leq n^{(0)}$.
+
+Now we are ready for the forward propagation calculations of the two-layer neural network in \autoref{fig:multi}. Computing the inner product matrix for the first layer,
+\begin{align*}
+    Z^{(1)}   &= (W^{(1)})^\top X \\
+        &=
+        \arraycolsep=1pt\def\arraystretch{1.1}
+        \begin{bmatrix}
+            w^{(1)}_{0,1} & w^{(1)}_{0,2} & \dots & w^{(1)}_{0,n^{(1)}} \\
+            w^{(1)}_{1,1} & w^{(1)}_{1,2} & \dots & w^{(1)}_{1,n^{(1)}} \\
+            \vdots & \vdots & \ddots & \vdots \\
+            w^{(1)}_{n^{(0)},1} & w^{(1)}_{n^{(0)},2} & \dots & w^{(1)}_{n^{(0)},n^{(1)}}
+        \end{bmatrix}^\top
+        \arraycolsep=2pt\def\arraystretch{1.1}
+        \begin{bmatrix}
+            x_0 \\ x_1 \\ \vdots \\ x_{n^{(0)}}
+        \end{bmatrix}
+        \\
+        &=
+        \arraycolsep=2pt\def\arraystretch{1.1}
+        \begin{bmatrix}
+            z^{(1)}_1 \\ z^{(1)}_2 \\ \vdots \\ z^{(1)}_{n^{(1)}}
+        \end{bmatrix}.
+\end{align*}
+The activation function of preference is then applied; for consistency, $\sigma$ is used.
+\begin{align*}
+    A^{(1)}
+        = \sigma(Z^{(1)})
+        =
+        \arraycolsep=2pt\def\arraystretch{1.1}
+        \begin{bmatrix}
+            \sigma(z^{(1)}_1) \\ \sigma(z^{(1)}_2) \\ \vdots \\ \sigma(z^{(1)}_{n^{(1)}})
+        \end{bmatrix}
+        =
+        \arraycolsep=2pt\def\arraystretch{1.1}
+        \begin{bmatrix}
+            a^{(1)}_1 \\ a^{(1)}_2 \\ \vdots \\ a^{(1)}_{n^{(1)}}
+        \end{bmatrix}.
+\end{align*}
+Now, just as with the original input matrix, slightly redefine $A^{(1)}$ by integrating the new bias $w^{(2)}_{0}\coloneqq b^{(2)}$, by adding $a^{(1)}_0\coloneqq 1$. Since there is only one linear summation node on the second layer, there is only one bias here. 
+Repeating the calculations above for the second linear layer by substituting $A^{(1)}$ instead of the inputs,
+\begin{align*}
+    Z^{(2)}   &= (W^{(2)})^\top A^{(1)} \\
+        &=
+        \arraycolsep=2pt\def\arraystretch{1.1}
+        \begin{bmatrix}
+            w^{(2)}_0 \\ w^{(2)}_1 \\ \vdots \\ w^{(2)}_{n^{(1)}}
+        \end{bmatrix}^\top
+        \arraycolsep=2pt\def\arraystretch{1.1}
+        \begin{bmatrix}
+            a^{(1)}_0 \\ a^{(1)}_1 \\ \vdots \\ a^{(1)}_{n^{(1)}}
+        \end{bmatrix}\\
+        &=\begin{bmatrix}
+            z^{(2)}
+        \end{bmatrix}, \\
+         A^{(2)}  &= \begin{bmatrix} \sigma(z^{(2)})\end{bmatrix}\\
+           &= \begin{bmatrix} a^{(2)}\end{bmatrix}.
+\end{align*}
+Forward propagation is terminated here, and the resulting predicted output $1 \times 1$ matrix $\overline{Y}=[\hspace{1mm}\overline{y}\hspace{1mm}]$ of this neural network is defined $\overline{y}=a^{(2)}$. Indeed this is specific to \autoref{fig:multi}, however notice the following recursive formula for an $L$ layer neural network,
+\begin{align*}
+    A^{(\ell)}=\sigma\left((W^{(\ell)})^\top A^{(\ell-1)}\right),
+\end{align*}
+for $1\leq \ell\leq L$. Therefore, the predicted output matrix $\overline{Y}:=A^{(L)}$ when $\ell=L$.

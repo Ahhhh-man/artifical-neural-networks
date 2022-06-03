@@ -1,0 +1,60 @@
+\section*{Index of Notation}
+\subsubsection*{General Comment}
+Superscript $(\ell)$ will denote the $\ell$-th layer while superscript $[t]$ will denote the $t$-th iteration.
+\vspace{-2mm}
+\subsubsection*{Sizes}
+\vspace{-5mm}
+\begin{table}[H]
+    \begin{tabularx}{\dimexpr\linewidth-\parindent}{p{.7cm} X}
+        {$n^{(\ell)}$}&{number of neurons in layer $\ell$}\\
+        {$L$}&{number of layers}
+    \end{tabularx}
+\end{table}
+\vspace{-2mm}
+\subsubsection*{Functions}
+\vspace{-5mm}
+\begin{table}[H]
+    \begin{tabularx}{\dimexpr\linewidth-\parindent}{p{.7cm} X}
+         $id$ & identity function \\
+         $\sigma$ & sigmoid logistics function \\
+         $\sigma'$ & first derivative of the sigmoid logistics function \\
+         $\mathcal{L}$ & squared error loss function \\
+         $\mathcal{J}$ & squared error cost function \\
+         $\mathcal{J}_{SE}$ & squared error cost function
+    \end{tabularx}
+\end{table}
+\vspace{-2mm}
+\subsubsection*{Sets, Vectors \& Matrices}
+\vspace{-5mm}
+\begin{table}[H]
+    \begin{tabularx}{\dimexpr\linewidth-\parindent}{p{.7cm} X}
+        {$\Vec{x}$}&{input vector}\\
+        {$X$}&{input matrix}\\
+        {$Y$}&{desired output matrix}\\
+        {$\overline{Y}$}&{predicted output matrix}\\
+        {$W^{(\ell)}$}&weight matrix of layer $\ell$\\
+        {$Z^{(\ell)}$}&inner-product  matrix of layer $\ell$\\
+        {$A^{(\ell)}$}&activated matrix of layer $\ell$\\
+        {$\theta$}&set of (machine-learnable) parameters\\
+        {$\hat{\theta}$}&optimal set of (machine-learnable) parameters\\
+        {$\nabla\mathcal{J}$}&gradient matrix of the squared error cost function
+    \end{tabularx}
+\end{table}
+\vspace{-2mm}
+\subsubsection*{Objects}
+\vspace{-5mm}
+\begin{table}[H]
+    \begin{tabularx}{\dimexpr\linewidth-\parindent}{p{.7cm} X}
+{$x_i$}&{$i$-th input}\\
+{$y_i$}&{$i$-th desired output}\\
+{$\overline{y}_i$}&{$i$-th predicted output}\\
+{$z^{(\ell)}_i$}&{$i$-th inner-product node in layer $\ell$}\\
+{$a^{(\ell)}_i$}&{$i$-th activated node in layer $\ell$}\\
+{$w^{(\ell)}_{i,j}$}&{weight between $j$-th node in layer $\ell$ and $i$-th node in layer $(\ell-1)$}\\
+{$\delta^{(\ell)}_i$}&{$i$-th error in layer $\ell$}\\
+{$b^{(\ell)}_i$}&{$i$-th bias in layer $\ell$}\\
+{$p$}&{$p$-th neuron on the input layer}\\
+{$q$}&{$q$-th neuron on the hidden layer}\\
+{$r$}&{$r$-th neuron on the output layer}
+    \end{tabularx}
+\end{table}

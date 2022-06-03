@@ -1,0 +1,42 @@
+\subsection{Background}\label{sec:background} 
+The theory behind the Artificial Neural Network is partially based on the biological architecture of the brain. In particular, the neural network, a network (highly connected structure) of nerve cells. Nerve cells (also known as neurons) are cells that acquire and relay information in the nervous system, whence the artificial neuron in an ANNs will mimic such traits. 
+\begin{figh}
+    \input{img/2_architecture/biological}
+    \caption{(a) A typical nerve cell found within the brain. (b) A generic model of a neural network perceptron with 3 inputs and a single output (parameters not shown).}
+    \label{fig:multifigneural}
+\end{figh}
+Observe how the dendrites, axon, and terminal of a biological neuron have affected the configuration of the neural network perceptron in \autoref{fig:multifigneural} by superimposing them \parencite{bio}. 
+
+Biological neurons are induced by all active neurons connected to them (via the dendritic tree), while artificial neurons mimic stimulus by summing up the product of the input neurons and their corresponding weighted connections. In addition, like the synapsed-linked neurons in the nervous system, the chaining of single-layer ANNs (perceptrons) together forms a multi-layer neural network. With multiple stages of nonlinear computing, a `deep' learning neural network can be built by expanding the hidden layers accordingly. One last idea ANNs use is that the human brain is a biological marvel because of (neuro) plasticity, that is to say that the whole brain system structures its own neural network and its capacity to adapt over experience \parencite{MCEWEN20188}. The phenomenon of plasticity is rooted in the error of back-propagation and gradient descent of the ANN, which will be discussed in \autoref{sec:back}.
+
+A feedforward neural network is an artificial neural network where the connections between neurons do not form a cycle, that is, information only flows forward in the network. While we will focus on feedforward neural networks for this report, as they were the first type of artificial neural network invented and are simpler than the many other architectures, e.g. Recurrent Neural Networks (RNNs), Convolutional Neural Networks (CNNs). Each of the architectures have their own advantages and disadvantages, so careful considerations must be made before selecting an architecture for a task. For a deeper understanding, \textcite{arc} compares different neural network architectures for digit image recognition.
+
+\subsection{Parameters}\label{sec:para}   
+All neural networks consist of parameters, labelled weights and bias, conventionally denoted $w$ and $b$ respectively. These parameters are variables that allow the learnable nature of a neural network model. As that of the nervous systems, `neurons' are the basic units of a neural network. When neurons from one layer transmit data to the subsequent layer, their synapses are weighted for the reason that not all inputs influence and affect a model equally; thus, the weights determine how much the input can influence the output by adjusting the input signal. The bias, on the other hand, is a constant that is applied to offset the model accordingly and is added to every neuron. Intuitively, the significance of the bias can be identified if the inputs are equal to the zero vector, $\Vec{0}=(0,0,...,0)$, then the model does not collapse due to the bias offset. Unlike weights, the bias added on the $\ell$-th layer is independent from all previous $(\ell-1)$ layers, that is, biases abstain from any incoming transmissions. A common example of such parameters, exists in the linear equation in $\mathbb{R}^2$, $y=mx+c$ where the gradient $m$ is the adjustable weight, and the $y$-intercept $c$ is the bias used to offset the line vertically.
+    
+\subsection{Activation Function}\label{sec:activation}
+Any neural network uses mappings, therefore the requisite activation function is introduced for the neural network. Activation functions are real-valued functions that are attached to every `neuron' of the ANN and used to determine the output of a neuron. These functions are significant  due to their ability to make sense of more complicated data by introducing a nonlinear component; it works by mapping input signals into a output signal.
+
+There are several choices available for the activation function and the preference usually depends on the task that we would like the network to execute. The identity function ${id}$ and the logistic sigmoid function $\sigma$ are two of the most commonly used activation functions in ANNs. Considering the former,
+\begin{align*}
+   {id}:\mathbb{R}\rightarrow \mathbb{R},\quad {id}(x) = x.
+\end{align*}
+This is the simplest activation function, which maps the pre-activated value to itself to form the post-activated value. This activation function would be suitable and successful for simple linear models where outputs are linear. Networks with the identity function have a linear model similar to that used in standard linear regression. However, the introduction of a non-linear dataset with a linear activation function would be limited in its complexity, and the ability to map complicated data functions will be hampered.  Therefore the nonlinear activation functions such as the logistic sigmoidal function
+\begin{align*}
+    \sigma:\mathbb{R}\rightarrow (0,1),\quad \sigma(x) = \frac{1}{1+e^{-x}},
+\end{align*}
+initially proposed within three papers by Pierre François Verhulst, a Belgian mathematician, from 1838 to 1847 is used. The logistic sigmoid function is widely used in statistical modelling. The main characteristic of an activation function is that it is smooth and differentiable on its domain (shown so for the logistic function evident by \autoref{fig:sigm} and \autoref{eq:sigmaprime}), as the derivative of the activation function will become very important later when the neural network gets trained in \autoref{subsec:train}. The first derivative of the logistic sigmoid function is given as,
+\begin{align}
+   \sigma'(x) &= \frac{\partial}{\partial x}\left[ \frac{1}{1+e^{-x}}\right] \nonumber \\
+   &= \frac{e^{-x}}{(1 + e^{-x})^2} \nonumber \\
+    &= \sigma(x)(1-\sigma(x)). \label{eq:sigmaprime}
+\end{align}
+%::::::::::::::::::::::::::
+\vspace{-6.5mm}
+\begin{figh}
+    \input{img/2_architecture/sigmoidgraph}
+    \caption{(Solid) Plot of the logistic sigmoid function $\sigma$ in the domain $[-5,5]$ and image $(0,1)$. (Dashed) Plot of the first derivative of logistic sigmoid function, $\sigma '$, in the domain $[-5,5]$ and image $(0,0.25]$.}
+    \label{fig:sigm}
+\end{figh}
+A useful comment about the derivative of the logistics sigmoid activation function is that \autoref{eq:sigmaprime} can be expressed in terms of the original function $\sigma$.  Assuming that $\sigma$ has been calculated at a point prior, it is computationally simpler to substitute this value and compute a single multiplication operation over re-evaluating another exponential function. In addition, this workload can be optimised to increase efficiency for information processing systems using cache memory \parencite{inproceedings}.
+    

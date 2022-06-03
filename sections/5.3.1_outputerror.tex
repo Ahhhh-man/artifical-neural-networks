@@ -1,0 +1,74 @@
+\subsubsection{Computing gradient with respect to \texorpdfstring{$W^{(2)}$}{W⁽²⁾}}
+In preparation of computing the gradients, the following theorem is required.
+\begin{thm}[Chain Rule for Composite Functions]
+Suppose that $y=f(x)$ and $x=g(t)$ are differentiable functions of $t$. Then $y=f\circ g (t)$ is a differentiable function of $t$ and
+\begin{align*}
+    \frac{\partial y}{\partial t} = 
+    \frac{\partial y}{\partial x}
+    \frac{\partial x}{\partial t}.
+\end{align*}
+\end{thm}
+\begin{proof}
+Proven in \textcite{Herman2021Chain}.
+\end{proof}
+Consider an arbitrary element $w^{(2)}_{q} \in W^{(2)}$ for any $0\leq q\leq n^{(1)}$. Then using gradient descent, parameter $w^{(2)}_{q}$ can be optimized, that is, calculating the minima of the SE function with respect to $w^{(2)}_{q}$,
+\begin{align*}
+    \frac{\partial \mathcal{J}_{SE}}{\partial w^{(2)}_{q}} 
+    &= \frac{\partial}{\partial w^{(2)}_{q}} \sbr[4]{\frac{1}{2}\sum_{r=1}^{n^{(2)}} {(a^{(2)}_r-y_r)^2}}\\
+     &=\sum_{r=1}^{n^{(2)}}  \left[{(a^{(2)}_r-y_r)} \frac{\partial}{\partial w^{(2)}_{q}} \sbr[3]{a_r^{(2)}-y_r}\right].
+\end{align*}
+Using the argument for \autoref{eq:reducedsquareerror},
+\begin{align}
+    \frac{\partial \mathcal{J}}{\partial w^{(2)}_{q}} 
+    &=(a^{(2)}-y) \frac{\partial}{\partial w^{(2)}_{q}} \sbr[3]{a^{(2)}-y}.
+    \label{eq:costdiff}
+\end{align}
+Observe the role of the constant `$\nicefrac{1}{2} $' in $\mathcal{J}$ is for convenience, to enable a simpler differentiation, but the sum of squared errors does not necessarily need such coefficient in order to compute the error\footnote{In \autoref{eq:squareerror}, one would need to linearly scale accordingly to find the error without the constant coefficient.}. Additionally, observe that $a^{(2)}$ is the only variable of $w^{(2)}_{q}$; oppose to the fact $\nicefrac{\partial y}{\partial w^{(2)}_{q}} = 0$. The results are simplified with the use of the chain rule,
+\begin{align}
+    \frac{\partial \mathcal{J}}{\partial w^{(2)}_q} 
+    &=(a^{(2)}-y) \frac{\partial a^{(2)}}{\partial w^{(2)}_{q}} \nonumber \\
+    &= (a^{(2)}-y) \sigma'(z^{(2)}) \frac{\partial z^{(2)}}{\partial w^{(2)}_q} .\label{eq:costdiff2}
+\end{align}
+Recall \autoref{eq:zee}, and investigating the partial derivative required,
+\begin{align*}
+\frac{\partial z^{(2)}}{\partial w^{(2)}_q} &= \frac{\partial}{\partial w^{(2)}_q} \sbr[3]{(W^{(2)})^\top A^{(1)}} \\
+&=\frac{\partial}{\partial w^{(2)}_q} \sbr[3]{w^{(2)}_q a^{(1)}_q}\\
+&= a^{(1)}_q.
+\end{align*}
+Thus \autoref{eq:costdiff2} becomes,
+\begin{align}
+    \frac{\partial \mathcal{J}}{\partial w^{(2)}_q} 
+    &= (a^{(2)}-y) \sigma'(z^{(2)}) a^{(1)}_q. \label{eq:eleven}
+\end{align}
+This indeed is the desired derivative, however notation found in literature for this equation is commonly simplified to the `delta form'. The purpose will become more apparent when calculating the gradient of $\mathcal{J}$ with respect to $W^{(1)}$.
+\begin{defn}
+Consider an $L$-layer neural network and let $0\leq i \leq n^{(\ell)}$ denote $i$-th neuron at the $\ell$-th layer. Similarly, let $0\leq j \leq n^{(\ell-1)}$ denote $j$-th neuron at the $(\ell-1)$-th layer. Then,
+\begin{align*}
+   \delta^{(\ell)}_i \equiv \frac{\partial \mathcal{J}}{\partial z^{(\ell)}_i},
+\end{align*}
+where $\delta$ is representing the error at each neuron $i$ in layer $\ell$ for $1\leq \ell \leq L$.
+Then, for the output layer ($\ell=L$),
+\begin{align*}
+    \delta^{(L)}_i = (a^{(L)}_i-y_i)\sigma'(z^{(L)}_i),
+\end{align*}
+where $\delta$ is representing the error in the $i$-th output \parencite{PIETILA2012987}.
+\label{defn:deltaform}
+Hence, the \textit{delta form} of derivative the cost error with respect to the weights of the output layer is given by
+\begin{equation}
+    \frac{\partial \mathcal{J}}{\partial w^{(L)}_{i,j}} = \delta^{(L)}_i a^{(L-1)}_{j}. \label{eq:DELTAFORM}
+\end{equation}
+\end{defn}
+In a nutshell, \autoref{eq:DELTAFORM} calculates the contribution of each $w^{(L)}_{p,q}$ adds to the error signal by weighting the error by the magnitude of the previous layer's output activation. 
+
+Hence, in Step 5 for \cref{alg:grad} (gradient descent algorithm),
+\begin{align*}
+    w^{(2)}_{q} & \leftarrow  w^{(2)}_q - \eta \nabla_{w^{(2)}_q} \mathcal{J} \\
+    &\leftarrow  w^{(2)}_q - \eta \frac{\partial \mathcal{J}}{\partial w^{(2)}_q} \\
+    &\leftarrow  w^{(2)}_{q} - \eta \delta^{(2)} a^{(1)}_q.
+\end{align*}
+\begin{rem}
+Recall that, $a^{(1)}_j=1$ for the bias $w^{(2)}_j$, for $j=0$. Thus \autoref{eq:eleven} gives, 
+$$ \frac{\partial \mathcal{J}}{\partial w^{(2)}_0} = \delta^{(2)}. $$
+Therefore, the bias is only updated by the information on or after its respective layer. 
+\end{rem}
+

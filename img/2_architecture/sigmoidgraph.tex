@@ -1,0 +1,20 @@
+\begin{tikzpicture}[scale=.8]
+    \begin{axis}[   
+        grid=minor,  
+        xtick={-5,0,5},   
+        xmin=-5,
+        xmax=5,
+        axis x line=bottom,
+        ytick={0,.5,1},
+        ymax=1.1,
+        ymin=-.2,
+        axis y line=middle,
+        no markers,
+        legend style={at={(0.25,.95)}}
+    ]
+        \addplot[thick,black,mark=none,samples=200,domain=-5:5,] (x,{1/(1+exp(-x))});
+        \addplot[thick,black,dashed,mark=none,samples=200,domain=-5:5,] (x,{e^(-x)/(1 + e^(-x))^2});
+        
+        \legend{$\sigma$,$\sigma'$}
+    \end{axis}
+\end{tikzpicture}

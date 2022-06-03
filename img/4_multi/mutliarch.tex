@@ -1,0 +1,46 @@
+\begin{tikzpicture}[x=1.25cm, y=1.25cm]
+    % input circles + ellipses
+    \foreach \m/\l [count=\y] in {1,2,missing,3}
+    \node [every neuron/.try, neuron \m/.try] (input-\m) at (0,1-\y) {};
+    
+    % input label
+    \foreach \l [count=\i] in {0,1,N}
+    \node at (input-\i) {$x_\l$};
+    
+    \foreach \m/\l [count=\y] in {1,2,missing,3}
+    \node [large2 neuron/.try, neuron \m/.try,] (sigma-\m) at (2.5,1.65-1.25*\y) {};
+    
+    \foreach \i in {1,2,3}
+      \foreach \j in {1,2,3}
+        \draw [-latex,gray] (input-\i) --  (sigma-\j);
+    \foreach \j [count=\i] in {0,1,N}
+            \draw [-latex] (input-\i) -- node[inner sep=2pt,fill=black!10] {$w^{(1)}_{\j,1}$} (sigma-1);
+     
+    \node[] at (sigma-1) {\Large$z^{(1)}_{1}$};
+    
+    \foreach \m/\l [count=\y] in {1,2,missing,3}
+    \node [square neuron/.try, neuron \m/.try] (square-\m) at (3.75,1.65-1.25*\y) {};
+    
+    \node[] at (square-1) {$a^{(1)}_1$};
+            
+    \foreach \i in {1,2,3}
+        \draw [-latex] (sigma-\i) -- (square-\i);
+        
+    
+    \node[large2 neuron] (sigma) at (6,-1.5) {\Large$z^{(2)}$};
+    \node[every neuron] (bias) at (6,.5) {$a^{(1)}_0$};
+    \draw [-latex] (bias) -- node[inner sep=2pt,fill=black!10] {$w^{(2)}_0$} (sigma);
+    
+    
+    \foreach \j [count=\i] in {1,2,M}
+            \draw [-latex] (square-\i) -- node[inner sep=2pt,fill=black!10] {$w^{(2)}_\j$} (sigma);
+    
+    \node[square neuron] (activation) at (7.25,-1.5) {$a^{(2)}$};
+        \draw [-latex] (sigma) -- (activation);
+    
+    \node[every neuron] (output) at (8.5,-1.5) {$\overline{y}$};
+        \draw [-latex] (activation) -- (output);
+%    \foreach \l [count=\i] in {0}
+ %       \node at (input-\i) {\LARGE$\displaystyle\Sigma$};
+    
+\end{tikzpicture}

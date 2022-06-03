@@ -1,0 +1,25 @@
+\subsection{Learning Rate}\label{sec:learningrate}
+We have discussed the importance of parameters such as weights and biases, known as machine-learnable parameters. However, the learning rate $\eta$ is a configurable hyper-parameter\footnote{Hyper-parameter is a parameter used to control the learning process. } used in the training of neural networks. Unlike machine-learnable parameters, which are derived from the learning process, the learning rate must be predefined to tweak the model's output as well as to monitor how the algorithms learn.
+%Evidently by Fig. \ref{fig:multilearn}, the learning rate is significant. 
+
+\begin{figh}
+        \input{img/5_back/combinedfigure}
+        \caption{(a) Very high $\eta$ causes divergences (b) High $\eta$ causes overshooting (c) Optimal $\eta$ converges to minima (d)  Low $\eta$ converges slowly towards minima.}
+        \label{fig:multilearn}
+\end{figh}
+    
+As like the activation and cost functions, the learning rate is given by a function of preference.  \textcite{wu2019demystifying} states choosing an appropriate learning rate can be difficult, as depicted in \autoref{fig:multilearn}.
+As if $\eta$ is small, then due to the minor changes made to the weights of each update the rate of convergence will be slow, whence require more training epochs (one cycle through the full training dataset). In contrast, if $\eta$ is large, then due to rapid changes, the risk of overshooting arises but require fewer training epochs. In some cases this may lead to the variables diverging from the optimal and in others result in sub-optimality. Hence any desirable learning rate must have such trade offs.
+    
+The constant learning rate is a baseline default function for neural network frameworks (e.g.  Caffe)\footnote{Caffe is an open source deep learning framework originally developed at University of California, Berkeley.}. An optimum constant learning rate for a model cannot be calculated with analysis methods on a given dataset, however, a good sufficient learning rate can be achieved by trial and error \parencite{wu2019demystifying}.  In general, a popular and naive starting point is taking a relatively very small constant learning rate, for instance $\eta := 1\mathrm{e}{-1} = 0.1$. Then, decrement the exponential per simulation of the neural network until a suitable learning rate is produced, e.g. $1\mathrm{e}{-2}= 0.01$, $1\mathrm{e}{-3}= 0.001$, etc. 
+%But of course alternative functions can be used instead of the default, for example, the fixed step size (decaying) learning rate. 
+
+\subsection{Limitations of Gradient Descent}
+While gradient descent has been shown to be very useful for achieving the objective function, there are indeed limitations:
+
+\begin{itemize}[leftmargin=*]
+    \item As previously stated, a suitable learning rate must be chosen to ensure the success of a parameter update policy. 
+    \item If the error cost function has a large number of local minima, there is no guarantee that the process will find the global minimum \parencite{298667}.
+    The gradient descent algorithm, in particular, does not distinguish between local and global minima, because once a process reaches a minima, it is unable to escape (given that the learning rate is not sufficiently large enough to exceed the size of the ditch). 
+    \item The optimal parameters the process yields is dependable on the initialisation of the parameters, that is, let $\Bar{\theta}$ and $\Tilde{\theta}$ be distinct parameter initialisations, then $\Bar{\theta}^{[t^*]}$ and $\Tilde{\theta}^{[t^*]}$ may or may not be identical. This difference between the two optimal parameters the process yields can be as small as the $\epsilon$ in \cref{alg:grad} or can be a consequence of the limitation above, the parameters have converged into different minima.
+\end{itemize}

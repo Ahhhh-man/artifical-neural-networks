@@ -1,0 +1,42 @@
+\usepackage{tikz}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.8}
+\usetikzlibrary{matrix,chains,positioning,decorations.pathreplacing,arrows,calc,shapes}
+
+% Define block styles
+\tikzset{%
+  every neuron/.style={
+    circle,
+    draw,
+    minimum size=1cm
+  },
+  large2 neuron/.style={
+    circle,
+    draw,
+    minimum size=1.5cm,
+    font=\Large
+  },
+  square neuron/.style={
+    draw,
+    minimum size=1cm
+  },
+  large neuron/.style={
+    circle,
+    draw,
+    minimum size=1cm,
+    scale=1.5,
+    font=\Large
+  },
+  neuron missing/.style={
+    draw=none, 
+    scale=2,
+    text height=0.333cm,
+    execute at begin node=\color{black}$\vdots$
+  },
+}
+
+
+\tikzstyle{io} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=red!0]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=orange!0]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=green!0]

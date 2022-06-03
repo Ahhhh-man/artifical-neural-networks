@@ -1,0 +1,55 @@
+\subsubsection{Computing gradient with respect to \texorpdfstring{$W^{(1)}$}{W⁽¹⁾}}
+Now the issue arises on how the partial derivatives of different layers than the output layer can be calculated. 
+Notice that computing gradient with respect to $W^{(2)}$ for back-propagation only goes back upto the hidden layer in \autoref{fig:multi}. Consequently, the indirect weights remain unchanged, however the error back-propagation can be extended all the way back to the input layer by repeating the process successively. Then, similar to above,
+\begin{align}
+    \frac{\partial \mathcal{J}}{\partial w^{(1)}_{p,q}} 
+    %&= \frac{\partial}{\partial w^{(1)}_{i,j}} \sbr[3]{\frac{1}{2}\sum_{k=1}^K {(a^{(2)}_k-t_k)^2}}\\
+    %&=\sum_{k=1}^K {(a^{(2)}_k-t_k)} \frac{\partial}{\partial w^{(1)}_{i,j}} \sbr[3]{a_k^{(2)}-t_k} \\
+    &={(a^{(2)}-{y})} \sigma'(z^{(2)}) \frac{\partial z^{(2)}}{\partial w^{(1)}_{p,q}}. \label{eq:fairytail}
+\end{align}
+Using the chain rule to compute,
+\begin{align}
+    \frac{\partial z^{(2)}}{\partial w^{(1)}_{p,q}} 
+    &= \frac{\partial z^{(2)}}{\partial a^{(1)}_{q}} \frac{\partial a^{(1)}_{q}}{\partial w^{(1)}_{p,q}} \nonumber\\
+    &=w_{q}^{(1)}\sigma'(z^{(1)}_q) \frac{\partial z_q^{(1)}}{\partial w^{(1)}_{p,q}} \nonumber \\
+    &=w_{q}^{(1)}\sigma'(z^{(1)}_q) a^{(0)}_p \nonumber \\
+    &=w_{q}^{(1)}\sigma'(z^{(1)}_q) x_p \label{eq:hello}.
+\end{align}
+Hence, combining \autoref{eq:hello} and \autoref{eq:fairytail},
+\begin{align}
+    \frac{\partial \mathcal{J}}{\partial w^{(1)}_{p,q}} &= {(a^{(2)}-{y})} \sigma'(z^{(2)})w_{q}^{(1)}\sigma'(z^{(1)}_q) x_p. \nonumber
+\end{align}
+Again, the equation will be simplified to the delta form.
+Consider the following error term equation by \cref{defn:deltaform} and the chain rule \parencite{artifical},
+\begin{align*}
+    \delta^{(\ell)}_i \equiv  \frac{\partial \mathcal{J}}{\partial z^{(\ell)}_{i}} 
+    = \sum_{j=1}^{n^{(\ell+1)}} 
+    \frac{\partial \mathcal{J}}{\partial z^{(\ell+1)}_{j}} 
+    \frac{\partial z^{(\ell+1)}_{j}}{\partial z^{(\ell)}_{i}},
+\end{align*}
+for $1\leq \ell\leq L-1$ and $1\leq i \leq n^{(\ell)}$. Then, investigating the partial derivatives individually,
+\begin{align*}
+     \frac{\partial z^{(\ell+1)}_{j}}{\partial z^{(\ell)}_{i}} 
+     &= \frac{\partial}{\partial z^{(\ell)}_{i}} \left[ \sum_{i=1}^{n^{(\ell)}} w_{i,j}^{(\ell)}a^{(\ell)}_i \right] \\
+     &= \frac{\partial}{\partial z^{(\ell)}_{i}} \left[ w_{i,j}^{(\ell)}a^{(\ell)}_i \right] \\
+     &= w_{i,j}^{(\ell)} \sigma'(z^{(\ell)}_{i}).
+\end{align*}
+And by \cref{defn:deltaform}, 
+\begin{align*}
+     \frac{\partial \mathcal{J}}{\partial z^{(\ell+1)}_{j}} &\equiv \delta_j^{(\ell+1)}.
+\end{align*}
+Therefore, the error $\delta$ is determined as follows for any layer before the output layer,
+\begin{align*}
+    \delta^{(\ell)}_i &= \sigma'(z_i^{(\ell)}) \sum_{j = 1}^{n^{(\ell+1)}} \delta_j^{(\ell+1)}w_{i,j}^{(\ell+1)},
+\end{align*}
+for $1\leq \ell \leq L-1$. This is known as the back-propagation formula. Hence the delta form for the partial derivative is,
+\begin{align}
+    \frac{\partial \mathcal{J}}{\partial w^{(1)}_{p,q}} 
+    &=\left(\delta^{(2)} w^{(2)}_{q} \sigma'(z^{(1)}_q)\right) x_p 
+    =\delta^{(1)}_q x_p. \label{eq:hellokitty}
+\end{align}
+Thus, the parameters in the hidden layer are updated as follows, 
+\begin{align*}
+    w^{(1)}_{p,q}
+    &\leftarrow  w^{(1)}_{p,q} - \eta \delta^{(1)}_q x_p.
+\end{align*}

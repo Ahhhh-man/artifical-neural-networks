@@ -1,0 +1,57 @@
+% Column separation ----------------------------------------------
+\setlength{\columnsep}{.4cm}
+
+
+
+% control title spacing ------------------------------------------------------
+\usepackage[raggedright]{titlesec}
+\raggedbottom
+
+\titlespacing*{\section}
+{0pt}{.9em}{.9em}
+\titlespacing*{\subsection}
+{0pt}{.6em}{.6em}
+
+% Add outline to Figures ------------------------------------------
+\newcommand{\hr}{\rule{\linewidth}{.8pt}\vspace{5mm}}
+\newcommand{\br}{\rule{\linewidth}{.8pt}\vspace{0mm}}
+\newenvironment{fig}
+    {\begin{figure}\hr\centering}
+    {\br\end{figure}\vspace{-3mm}}
+\newenvironment{figh}
+    {\begin{figure}[H]\hr\centering}
+    {\br\end{figure}\vspace{-3mm}}
+\newenvironment{bigfig}
+    {\begin{figure*}\hr\centering}
+    {\br\end{figure*}}
+
+% Theorems -------------------------------------------------
+\usepackage{amsthm}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}
+
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}
+
+\theoremstyle{remark}
+\newtheorem*{rem}{Remark}
+
+
+% Abstract ----------------------------------
+\renewenvironment{abstract}
+ {
+  \begin{center}
+  \bfseries \abstractname\vspace{-.5em}\vspace{0pt}
+  \end{center}
+  \list{}{
+    \setlength{\leftmargin}{0cm}%
+    \setlength{\rightmargin}{\leftmargin}%
+  }%
+  \item\relax}
+ {\endlist}
+
+
+% Misc --------------------------------------
+\captionsetup{width=\linewidth}
+

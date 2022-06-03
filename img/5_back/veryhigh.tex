@@ -1,0 +1,32 @@
+\begin{tikzpicture}[scale=.45]
+        \begin{axis}[   
+            grid=minor,  
+            ticks=none,
+            xmin=0,
+            xmax=4,
+            axis x line=middle,
+            ymax=.8,
+            ymin=0,
+            axis y line=left,
+            no markers,
+            axis line style=gray,
+            xlabel style=gray,
+            ylabel style=gray,
+        ]
+            \addplot[black,mark=none,samples=200,domain=0:10,] (x,{(x/2-1)^2+.1});
+            %\addplot[dashed,black,mark=none,samples=200,domain=0:10,] (x,{.7*x-1.8});
+        \end{axis}
+        
+        \node[inner sep=1mm] (A) at (5.55,3.5){};
+        \node[inner sep=1mm] (B) at (1.1,4){};
+        \node[inner sep=1mm] (C) at (6.1,5.2){};
+        \node[inner sep=1mm] (D) at (3,5.5){};
+        
+        \draw[-latex,red, thick] (A) edge[bend left=35] (B);
+        \draw[-latex,red, thick] (B) edge[bend right=25] (C);
+        \draw[-latex,red, thick] (C) edge[bend left=15] (D);
+        
+        \node[inner sep=-.2mm] at (A){$\bullet$};
+        \node[inner sep=-.2mm] at (B){$\bullet$};
+        \node[inner sep=-.2mm] at (C){$\bullet$};
+\end{tikzpicture}
